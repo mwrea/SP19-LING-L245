@@ -1,0 +1,105 @@
+---
+title: "Problem Set 10"
+author: "Michael Rea"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+1. The null hypothesis is that each position is equally likely to win, so this can be represented as:
+```{r}
+horse_obs <- c(29, 19, 18, 25, 17, 10, 15, 11)
+#Now the null hypothesis will be tested with a chi-squared test
+horse_exp <- rep(144/8, 8)
+horsex2 <- sum((horse_obs - horse_exp)^2/horse_exp)
+1 - pchisq(horsex2, df=7)
+```
+The P-value is quite low, so it would appear that the positions do have some effect on winrate.
+
+2. 
+```{r}
+mm_total <- sum(121, 84, 118, 226, 226, 123)
+mm_obs <- c(121, 84, 118, 226, 226, 123)
+mm_exp <- c(mm_total*.13, mm_total*.14, mm_total*.13,
+            mm_total*.24, mm_total*.20, mm_total*.16)
+mmx2 <- sum((mm_obs - mm_exp)^2/mm_exp)
+1 - pchisq(mmx2, df=5)
+```
+The chi-squared test returns a p-value that is essentially zero, and so the reported M&M color proportions were an outright fabrication. Truly an injustice.
+
+3. a) 
+The dominant trait (tall, cut-leaf) are expected to have a 3/4 chance of occuring. Likewise, the recessives have a 1/4 chance of appearing.
+```{r}
+e1 <- .75*.75
+e2 <- .75*.25
+e3 <- .25*.75
+e4 <- .25*.25
+#tall cut-leaf
+e1
+#tall potato-leaf
+e2
+#dwarf cut-leaf
+e3
+#dwarf potato-leaf
+e4
+```
+b)
+```{r}
+otot <- 926+288+293+104
+o1 <- 926/otot
+o2 <- 288/otot
+o3 <- 293/otot
+o4 <- 104/otot
+tom_exp <- c(e1, e2, e3, e4)
+tom_obs <- c(o1, o2, o3, o4)
+tomx2 <- sum((tom_obs - tom_exp)^2/tom_exp)
+1-pchisq(tomx2, df=1)
+
+```
+With a p-value of nearly 1, the null hypothesis appears to be accurate and the estimated proportions from part (a) are correct.
+
+4. If the sex ratio of sandflies trapped were equivalent, we would expect the value of $male/female$ for each height to be roughly 1.
+```{r}
+flyobs <- c(173, 125, 150, 73)
+flytot <- sum(173, 125, 150, 73)
+fmale <- (173+125)/flytot
+ffemale<- (150+73)/flytot
+f3 <- (173+150)/flytot
+f35 <- (125+73)/flytot
+
+flyexp <- c(fmale*f3*flytot, fmale*f35*flytot, ffemale*f3*flytot, ffemale*f35*flytot)
+flyx2 = sum((flyobs - flyexp)^2/flyexp)
+1-pchisq(flyx2, df=1)
+```
+
+The p-value is quite low, indicating that there is likely some variation in the ratios. The data shows that far fewer females were caught in the higher trap, which may account for this discrepancy in ratio.
+
+5. 
+```{r}
+hdtotal <- 8474
+hdobs <- c(3110, 4731, 633, 53, 110, 27)
+
+
+
+hdlow <- (3110)/hdtotal
+hdmid<- (4731)/hdtotal
+hdhigh <- (633)/hdtotal
+gotlow <- (53)/hdtotal
+gotmid <- 110/hdtotal
+gothigh <- 27/hdtotal
+
+hdexp <- c(hdlow*gotlow*hdtotal, hdmid*gotmid*hdtotal, hdhigh*gothigh*hdtotal)
+hdx2 = sum((hdobs - hdexp)^2/hdexp)
+1-pchisq(hdx2, df=2)
+```
+The returned p-value is literally zero, and so the test indicates that it is almost certain that anger and heart disease are correlated given the data.
+b) There are a few reasons this data should not be taken as concrete proof that anger affects heart disease. 
+```{r}
+53/3110
+110/4731
+27/633
+```
+
+Firstly, though greater degrees of anger did correlate to higher rates, the proportion of people that got heart disease was very small across the board. Also, the experiment only tested a random group of people without heart disease and watched them for four years, so it may have proven only that anger levels cause heart disease to develop more rapidly for those at risk rather than their proclivity to develop it at all.
